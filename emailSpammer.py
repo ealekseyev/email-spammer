@@ -11,9 +11,18 @@ try:
     sent_from = 'arandomperson4206969@gmail.com'
     sent_from_pass = list('jepoufwfolopx21') #os.popen("cat pass.txt").read()
 except: pass
+
 to_emails = [str(sys.argv[1])]
 subject = str(sys.argv[3])
 from_name = sys.argv[2]
+
+threads = 30
+
+def returnNone(lenlist):
+	obj = []
+	for i in range(lenlist):
+		obj.append(None)
+	return obj
 
 def set_email_text(body):
 	e = "From: {}\n".format(from_name)
@@ -50,28 +59,31 @@ def main():
 
 reps = int(sys.argv[4])
 repsLeft = reps
-p = [None, None, None, None, None, None, None, None, None, None]
+p = returnNone(threads)
 
 for i in range(len(sent_from_pass)):
 	sent_from_pass[i] = chr(ord(sent_from_pass[i])-1)
-
 sent_from_pass = "".join(sent_from_pass)
 
 print("Starting with " + sent_from)
 
-if reps <= 10:
+#replace threads for num
+if reps <= threads:
 	for i in range(reps):
 		p[i] = mp.Thread(target=main)
 		p[i].start()
 	for i in range(reps):
 		p[i].join()
+
 else:
-	for i in range(10):
+	#replace threads for num
+	for i in range(threads):
 		p[i] = mp.Thread(target=main)
 		p[i].start()
 		repsLeft -= 1
 	while True:
-		for i in range(10):
+		#replace threads for num
+		for i in range(threads):
 			if p[i].is_alive() == False and repsLeft > 0:
 				p[i] = mp.Thread(target=main)
 				p[i].start()
@@ -79,7 +91,8 @@ else:
 			elif repsLeft == 0:
 				break
 		if repsLeft <= 0:
-			for i in range(10):
+			#replace threads for num
+			for i in range(threads):
 				p[i].join()
 			break
 
