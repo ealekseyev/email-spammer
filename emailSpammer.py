@@ -79,9 +79,8 @@ else:
 			elif repsLeft == 0:
 				break
 		if repsLeft <= 0:
+			for i in range(10):
+				p[i].join()
 			break
-
-for i in range(10):
-	p[i].join()
 
 print("done")
