@@ -16,7 +16,7 @@ to_emails = [str(sys.argv[1])]
 subject = str(sys.argv[3])
 from_name = sys.argv[2]
 
-threads = 30
+threads = 50
 
 def returnNone(lenlist):
 	obj = []
@@ -53,8 +53,8 @@ def main():
 		server.close()
 		print('Email Sent')
 	except Exception as e:
-		print(e)
-		sleep(0.2)
+		#print(e)
+		sleep(0.05)
 		main()
 
 reps = int(sys.argv[4])
