@@ -1,4 +1,3 @@
-from urllib.request import urlopen
 import smtplib, socket, json, sys, os
 from random import randrange
 import threading as mp
