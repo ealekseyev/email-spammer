@@ -8,7 +8,7 @@ emails = {"sceet421@gmail.com":"fwbodppm",
           #"evanalekseyev@gmail.com":"fwbodppm",
           "arandomperson4206969@gmail.com":"jepoufwfolopx21"}
 subject = ""
-target = "sceet422@gmail.com" # "alexzhu23@mittymonarch.com"
+target = "alexzhu23@mittymonarch.com"
 reps = 100
 threads = 30
 
