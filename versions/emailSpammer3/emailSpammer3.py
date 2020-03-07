@@ -12,10 +12,9 @@ emails = {"sceet421@gmail.com":"fwbodppm",
 
 osData = os.uname()
 
-
 print("Note that if you send too many emails from a single IP, the SMTP server may block your IP address.\n")
 
-target = input("Target > ") #sys.argv[1] #"alexzhu23@mittymonarch.com"
+target = input("Target > ")
 
 try:
     target.index("@")
@@ -25,7 +24,6 @@ except:
 if target == "giantsmilodon@gmail.com" or target == "evanalekseyev23@mittymonarch.com":
     print("E: Invalid target, Quitting...")
     exit()
-
 
 name = input("Name of sender, default none > ")
 subject = input("Subject, default none > ")
@@ -55,7 +53,9 @@ if threads > reps:
     print("E: Thread count cannot be larger than email count. Quitting...")
     exit()
 
+
 print("{} emails will be sent to {} using {} threads at a time. Starting...".format(str(reps), str(target), str(threads)))
+
 
 # generate random amount of text of iter length
 def random_text(iter):
@@ -117,6 +117,8 @@ def main(from_name, sent_from, sent_from_pass_enc, to_email, bdy_text, subject="
                  target,
                  random_text(randrange(500, 1000)),
                  subject)
+
+# Start main
 
 if __name__ == "__main__":
     # Send first email
