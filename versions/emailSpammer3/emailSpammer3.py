@@ -1,10 +1,10 @@
 import smtplib, socket, sys, os, time
 from random import randrange
 import threading as t
+from cryptography.fernet import Fernet
 
 emails = {"sceet421@gmail.com":"fwbodppm",
           "sceet422@gmail.com":"fwbotdffu533",
-          #"evanalekseyev@gmail.com":"fwbodppm",
           "arandomperson4206969@gmail.com":"jepoufwfolopx21",
           "anotherspamemail514@gmail.com":"jepoufwfolopx3",
           "anotherspamemail513@gmail.com":"jepoufwfolopx2"
