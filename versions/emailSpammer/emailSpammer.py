@@ -5,11 +5,11 @@ from time import sleep
 
 # use base spammer/spoofer unless there is a 5th argv present
 sent_from = 'sceet421@gmail.com'
-sent_from_pass = list('fwbodppm') #os.popen("cat pass.txt").read()
+sent_from_pass = list('NULLLL') #os.popen("cat pass.txt").read()
 try:
     x = sys.argv[5]
     sent_from = 'arandomperson4206969@gmail.com'
-    sent_from_pass = list('jepoufwfolopx21') #os.popen("cat pass.txt").read()
+    sent_from_pass = list('NULLLL') #os.popen("cat pass.txt").read()
 except: pass
 
 # header info

@@ -2,15 +2,15 @@ import smtplib, socket, sys, os, time
 from random import randrange
 import threading as t
 
-emails = {"sceet421@gmail.com":"fwbodppm",
-          #"sceet422@gmail.com":"fwbotdffu533",
-          #"evanalekseyev@gmail.com":"fwbodppm",
-          "arandomperson4206969@gmail.com":"jepoufwfolopx21"
+emails = {"sceet421@gmail.com":"NULLL",
+          #"sceet422@gmail.com":"NULLL",
+          #"evanalekseyev@gmail.com":"NULLL",
+          "arandomperson4206969@gmail.com":"NULL"
           }
 subject = ""
-name = sys.argv[2] #"Sweet revenge"
-target = sys.argv[1] #"alexzhu23@mittymonarch.com"
-reps = int(sys.argv[3]) #100
+name = sys.argv[2]
+target = sys.argv[1]
+reps = int(sys.argv[3])
 threads = 30
 
 # generate empty list (for thread array)
