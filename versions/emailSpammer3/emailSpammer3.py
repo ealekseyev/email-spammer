@@ -7,8 +7,7 @@ emails = {"sceet421@gmail.com":"fwbodppm",
           "sceet422@gmail.com":"fwbotdffu533",
           "arandomperson4206969@gmail.com":"jepoufwfolopx21",
           "anotherspamemail514@gmail.com":"jepoufwfolopx3",
-          "anotherspamemail513@gmail.com":"jepoufwfolopx2"
-          }
+          "anotherspamemail513@gmail.com":"jepoufwfolopx2"} #, "emailspammer96024@mail.com":"fnbjmtqbnnfs531"}
 
 osData = os.uname()
 
