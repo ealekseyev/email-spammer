@@ -71,7 +71,7 @@ def random_text(iter):
 # sends email and executes all dependencies
 # num is the amount of times it has had to execute
 # TODO: base64 for encryption
-count = 1
+count = 0
 def main(from_name, sent_from, sent_from_pass_enc, to_email, bdy_text, subject="", num=1, silent=0):
     global count
     global emails
