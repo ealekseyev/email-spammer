@@ -11,6 +11,7 @@ A basic email spammer written in python by Evan Alekseyev.
 2) Double click the executable inside the directory.
 
 ------------------ Optional: ------------------
+
 Linux: 
   1) cd into bin/Linux directory
   2) ./emailSpammer3
@@ -20,4 +21,4 @@ Mac OS X:
   2) ./emailSpammer3
   
 Windows:
-  Not yet supported.
+  * Not yet supported.
