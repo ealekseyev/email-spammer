@@ -1,1 +1,0 @@
-python3 Documents/GitHub/email-spammer/emailSpammer.py qingyuanli23@mittymonarch.com "Sup Bro" "" 50 
