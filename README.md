@@ -21,4 +21,4 @@ Mac OS X:
   2) ./emailSpammer3
   
 Windows:
-  * Not yet supported.
+  * Not yet supported, but the .exe binary file will be available soon.
