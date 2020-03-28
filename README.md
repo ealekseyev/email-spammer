@@ -2,10 +2,10 @@ A basic email spammer written in python by Evan Alekseyev.
 
 ------------------ Features: ------------------
 * Parallelism - multiple threads running at a time
-* Sends from 5 different emails
-* Compiled binaries for MacOS and Linux
+* Sends from as many different emails as you want
+* Thread count is configurable
+* Simple command line interface
 
 ----------------- How to use: -----------------
 1) Clone and unzip the repository.
-1) Find your Operating System in the bin directory .
-2) Run the python file inside the directory.
+2) Run the python file inside the email-spammer directory.
