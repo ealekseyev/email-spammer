@@ -3,18 +3,66 @@ from random import randrange
 import threading as t
 import os
 
+import base64
+import hashlib
+from Crypto.Cipher import AES
+from Crypto import Random
+
+BLOCK_SIZE = 16
+pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * chr(BLOCK_SIZE - len(s) % BLOCK_SIZE)
+unpad = lambda s: s[:-ord(s[len(s) - 1:])]
+ 
+def encrypt(raw, password):
+    private_key = hashlib.sha256(password.encode("utf-8")).digest()
+    raw = pad(raw)
+    iv = Random.new().read(AES.block_size)
+    cipher = AES.new(private_key, AES.MODE_CBC, iv)
+    return base64.b64encode(iv + cipher.encrypt(raw))
+ 
+ 
+def decrypt(enc, password):
+    private_key = hashlib.sha256(password.encode("utf-8")).digest()
+    enc = base64.b64decode(enc)
+    iv = enc[:16]
+    cipher = AES.new(private_key, AES.MODE_CBC, iv)
+    return unpad(cipher.decrypt(enc[16:]))
+
 # these are the email addresses and their passwords 
 # that the spam mail will be sent from.
 # for Gmail accounts you must allow 3rd party app access
 # in account settings.
-emails = {"youremailhere@provider.domain":"youremailpassword",
-          "emailherenumber2@provider.domain":"the password"}
+#value to test encryption. Once decrypted correctly, the value should be equal to "test_enc"
+test_enc = "dCvQ79ib8td3qXTkXbQjM/95GFIazp/ShXbw4cuL1O0="
+emails_enc = {"anotherspamemail513@gmail.com":"CB3YDiia4b3kGRFqCRaR9Ex/DrTfhYdAFUhnE3qTrJU=",
+          "anotherspamemail514@gmail.com":"5mNWK1kMcxtBY0QGGCwZS6YHuFzMW0udU12ud7tTEcc=",
+          "no426191@gmail.com":"rg2PoaT4djf+9s9sO9jqJPjbgtKOKadkQkJ9CmXoYTo=",
+          "uu3810816@gmail.com":"SuA2LS0ZZrzIlj92BYfAnXACPFfzIlgUX3OWqxIlQeA="}
+
+emails = {}
 
 print("Note that if you send too many emails from a single IP, the SMTP server may block your IP address.\n")
 
 # input the arguments for main()
 # also check that they are actually valid
 # and won't throw an exception.
+
+decryption_key = input("Password decryption key > ")
+
+if decrypt(test_enc, decryption_key).decode("utf-8") == "test_enc":
+    print("Verified correct decryption key decrypting passwords...")
+else:
+    print("E: Incorrect decryption key")
+    quit()
+
+for key, value in emails_enc.items():
+    try:
+        dec = decrypt(value, decryption_key).decode("utf-8")
+    except:
+        print("E: Incorrect decryption key")
+        quit()
+    emails.update( {key: dec} )
+
+print(emails)
 
 target = input("Target > ")
 
@@ -71,6 +119,7 @@ def random_text(iter):
 # sends email and executes all dependencies
 # count is the amount of times it has run main
 count = 0
+
 def main(from_name, sent_from, sent_from_pass, to_email, bdy_text, subject="", num=1, silent=0):
     global count
     global emails
@@ -91,11 +140,11 @@ def main(from_name, sent_from, sent_from_pass, to_email, bdy_text, subject="", n
         server.sendmail(sent_from, [to_email], email_text)
         server.close()
         if not silent:
-            print('Email ' + str(count) + 'sent on try ' + str(num) + ' from ' + sent_from)
+            print('Email ' + str(count) + ' sent on try ' + str(num) + ' from ' + sent_from)
         count += 1
     except Exception as e:
         # try sending again after short sleep
-        if num < 10:
+        if num < 15:
             time.sleep(0.05)
             try:
                 main(from_name, sent_from, sent_from_pass, to_email, bdy_text, subject, num+1)
