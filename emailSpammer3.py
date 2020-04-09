@@ -49,7 +49,7 @@ print("Note that if you send too many emails from a single IP, the SMTP server m
 decryption_key = input("Password decryption key > ")
 
 if decrypt(test_enc, decryption_key).decode("utf-8") == "test_enc":
-    print("Verified correct decryption key decrypting passwords...")
+    print("Verified decryption key, decrypting passwords...")
 else:
     print("E: Incorrect decryption key")
     quit()
@@ -61,8 +61,6 @@ for key, value in emails_enc.items():
         print("E: Incorrect decryption key")
         quit()
     emails.update( {key: dec} )
-
-print(emails)
 
 target = input("Target > ")
 
