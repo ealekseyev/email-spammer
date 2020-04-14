@@ -1,3 +1,4 @@
+# Python3 Email Spammer
 A basic email spammer written in python by Evan Alekseyev.
 
 ------------------ Features: ------------------
