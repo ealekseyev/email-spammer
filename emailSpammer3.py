@@ -8,18 +8,19 @@ import hashlib
 from Crypto.Cipher import AES
 from Crypto import Random
 
+from randomsent import rand_sentence
+
 BLOCK_SIZE = 16
 pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * chr(BLOCK_SIZE - len(s) % BLOCK_SIZE)
 unpad = lambda s: s[:-ord(s[len(s) - 1:])]
- 
+
 def encrypt(raw, password):
     private_key = hashlib.sha256(password.encode("utf-8")).digest()
     raw = pad(raw)
     iv = Random.new().read(AES.block_size)
     cipher = AES.new(private_key, AES.MODE_CBC, iv)
     return base64.b64encode(iv + cipher.encrypt(raw))
- 
- 
+
 def decrypt(enc, password):
     private_key = hashlib.sha256(password.encode("utf-8")).digest()
     enc = base64.b64decode(enc)
@@ -27,7 +28,7 @@ def decrypt(enc, password):
     cipher = AES.new(private_key, AES.MODE_CBC, iv)
     return unpad(cipher.decrypt(enc[16:]))
 
-# these are the email addresses and their passwords 
+# these are the email addresses and their encrypted passwords
 # that the spam mail will be sent from.
 # for Gmail accounts you must allow 3rd party app access
 # in account settings.
@@ -36,7 +37,11 @@ test_enc = "dCvQ79ib8td3qXTkXbQjM/95GFIazp/ShXbw4cuL1O0="
 emails_enc = {"anotherspamemail513@gmail.com":"CB3YDiia4b3kGRFqCRaR9Ex/DrTfhYdAFUhnE3qTrJU=",
           "anotherspamemail514@gmail.com":"5mNWK1kMcxtBY0QGGCwZS6YHuFzMW0udU12ud7tTEcc=",
           "no426191@gmail.com":"rg2PoaT4djf+9s9sO9jqJPjbgtKOKadkQkJ9CmXoYTo=",
-          "uu3810816@gmail.com":"SuA2LS0ZZrzIlj92BYfAnXACPFfzIlgUX3OWqxIlQeA="}
+          "uu3810816@gmail.com":"SuA2LS0ZZrzIlj92BYfAnXACPFfzIlgUX3OWqxIlQeA=",
+          "ms7001912@gmail.com":"txMGGI1O62FtNtF1D/KYtbLLuiZ+hVNmkHtnZ60CP0E=",
+          "jd2390529@gmail.com":"pZSnPDMKyGJsWgon5kbmMaLtrR0S1rLhfpmqV6NpGgY=",
+          "sd3239465@gmail.com":"puER54Ar9vObmkM1WR/xhlKo2aj8Iuc7aajbbWkNRKs=",
+          "jb1286815@gmail.com":"keaw3sgjKecSgE9FRSsWLuZEPPy+3PI+pCjJ7LGKw2g="}
 
 emails = {}
 
@@ -104,15 +109,17 @@ print("{} emails will be sent to {} using {} threads at a time. Starting...".for
 
 # generate random amount of text of iter length
 def random_text(iter):
+    """
     bdy = ''
     for i in range(iter):
         char = str(chr(randrange(33, 126)))
         if char != '.':
             bdy += char
-        else: 
+        else:
             bdy += 'k'
     return bdy
-
+    """
+    return rand_sentence()
 
 # sends email and executes all dependencies
 # count is the amount of times it has run main
