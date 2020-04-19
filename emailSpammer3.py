@@ -8,7 +8,7 @@ import hashlib
 from Crypto.Cipher import AES
 from Crypto import Random
 
-from randomsent import rand_sentence
+from randomsent import rand_sentence, rand_name
 
 BLOCK_SIZE = 16
 pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * chr(BLOCK_SIZE - len(s) % BLOCK_SIZE)
@@ -67,6 +67,7 @@ for key, value in emails_enc.items():
         quit()
     emails.update( {key: dec} )
 
+# target address
 target = input("Target > ")
 
 try:
@@ -75,9 +76,15 @@ except:
     print("E: Invalid target, Quitting...")
     exit()
 
-name = input("Name of sender, default none > ")
+# sender name
+name = input("Name of sender, default random > ")
+if name.replace(" ", "") == "":
+	name = "__RAND__"
+
+# subject of emails
 subject = input("Subject, default none > ")
 
+# email count
 reps = input("Email count, default 50 > ")
 
 if reps == "":
@@ -129,7 +136,10 @@ def main(from_name, sent_from, sent_from_pass, to_email, bdy_text, subject="", n
     global count
     global emails
     # set headers and body
-    email_text = "From: {}\n".format(from_name)
+    if from_name == "__RAND__":
+        email_text = "From: {}\n".format(rand_name())
+    else:
+        email_text = "From: {}\n".format(from_name)
     email_text += "To: {}\n".format(to_email)
     email_text += "Subject: {}\n\n".format(subject)
     email_text = email_text + bdy_text
